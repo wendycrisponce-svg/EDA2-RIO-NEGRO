@@ -3,7 +3,8 @@
 #include <sstream>
 #include <string>
 #include <vector>
-
+#include <climits>
+#include <algorithm>
 //----------aporte de SEBASTIAN------------
 class Nodo
 {
@@ -155,6 +156,57 @@ void imprimirNodos(std::vector<Nodo> &nodos)
 // declaracion de la funcion
 void preguntarRuta(const std::vector<Nodo>& nodos);
 
+// -------Aporte de KEVIN ------
+
+// Estructura que almacena el resultado final
+struct RutaResultado {
+    int distanciaTotal;
+    std::vector<int> camino;
+};
+
+// Algoritmo de Dijkstra que encuentra el camino más corto
+RutaResultado calcularDijkstra(const std::vector<Nodo>& nodos, int inicio, int fin) {
+    int n = nodos.size();
+    std::vector<int> dist(n, INT_MAX);    // Distancias mínimas desde el inicio
+    std::vector<int> padre(n, -1);       // Para reconstruir la ruta al final
+    std::vector<bool> visitado(n, false); // Nodos ya procesados
+
+    dist[inicio] = 0;
+
+    for (int i = 0; i < n - 1; i++) {
+        // 1. Buscar el nodo no visitado con la distancia mínima
+        int u = -1;
+        for (int j = 0; j < n; j++) {
+            if (!visitado[j] && (u == -1 || dist[j] < dist[u]))
+                u = j;
+        }
+
+        if (dist[u] == INT_MAX) break; // No hay más nodos alcanzables
+        visitado[u] = true;
+
+        // 2. Actualizar distancias de los vecinos
+        for (int v = 0; v < n; v++) {
+            unsigned int peso = nodos[u].distancias[v];
+            // Si hay conexión (peso > 0) y el nuevo camino es más corto
+            if (peso > 0 && dist[u] + (int)peso < dist[v]) {
+                dist[v] = dist[u] + peso;
+                padre[v] = u;
+            }
+        }
+    }
+
+    // 3. Reconstruir el camino desde el destino al origen
+    RutaResultado res;
+    res.distanciaTotal = dist[fin];
+    if (dist[fin] != INT_MAX) {
+        for (int v = fin; v != -1; v = padre[v]) {
+            res.camino.push_back(v);
+        }
+        // Invertimos el camino para que vaya de origen a fin
+        std::reverse(res.camino.begin(), res.camino.end());
+    }
+    return res;
+}
 
 int main()
 {
@@ -176,7 +228,10 @@ y no del programador*/
 */
 
  //----------aporte de SEBASTIAN------------
-	borrarNodo(nodos, 7);
+	 // borrarNodo(nodos, 7); aca hay un error No existe la ciudad 7 Y el programa se rompe.
+	 if (!nodos.empty()) {
+    borrarNodo(nodos, 0); // Borra la primera ciudad (Viedma) de forma segura
+}
 
 	imprimirNodos(nodos);
 
