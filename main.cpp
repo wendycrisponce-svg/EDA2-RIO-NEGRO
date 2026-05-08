@@ -263,7 +263,7 @@ int obtenerDistancia(const std::vector<Nodo>& nodos, int salida, int destino)
    hize que usando los datos guardados para que se cree una lista de las ciudades
    e indicando con un numero sea mas facil
    para el usuario indicar donde esta y a donde quiere ir
-   */
+   
 void preguntarRuta(const std::vector<Nodo>& nodos) {
     int salida, destino;
 
@@ -286,4 +286,47 @@ void preguntarRuta(const std::vector<Nodo>& nodos) {
     std::cout << "Quiere viajar a: " << nodos[destino].nombre << "\n";
     std::cout << "Distancia a recorrer: " << distancia << " km\n";
       std::cout << "\n";
+}*/
+// aporte de kevin:modifique la funcion de salida para que sea mas grafico y el dijkstra pueda apreciearse 
+void preguntarRuta(const std::vector<Nodo>& nodos) {
+    int salida, destino;
+
+    std::cout << "Ciudades disponibles:\n";
+    for (unsigned int i = 0; i < nodos.size(); i++) {
+        std::cout << i << " - " << nodos[i].nombre << "\n";
+    }
+
+    std::cout << "\nIngrese el numero de la ciudad de salida: ";
+    std::cin >> salida;
+
+    std::cout << "Ingrese el numero de la ciudad de destino: ";
+    std::cin >> destino;
+
+    
+    // Llamamos al algoritmo 
+    RutaResultado resultado = calcularDijkstra(nodos, salida, destino);
+
+    std::cout << "\n==========================================" << std::endl;
+    std::cout << "      HOJA DE RUTA" <<std:: endl;
+    std::cout << "==========================================" << std::endl;
+    std::cout << "Origen:  " << nodos[salida].nombre <<std:: endl;
+    std::cout << "Destino: " << nodos[destino].nombre <<std:: endl;
+
+    // Mostramos el camino paso a paso que calculó el algoritmo
+    std::cout << "\nITINERARIO SUGERIDO: ";
+    for (int i = 0; i < resultado.camino.size(); i++) {
+        int id = resultado.camino[i];
+        std::cout << nodos[id].nombre;
+        
+        if (i < resultado.camino.size() - 1) {
+            std::cout << " -> "; // Flecha entre ciudades
+        }
+    }
+
+    std::cout << "\n\nDISTANCIA TOTAL OPTIMIZADA: " << resultado.distanciaTotal << " km" << std:: endl;
+
+    // Cálculo extra basado en los datos de camiones (80 km/h) [cite: 102]
+    double tiempoHoras = (double)resultado.distanciaTotal / 80.0;
+    std::cout << "TIEMPO ESTIMADO DE VIAJE: " << tiempoHoras << " horas" << std::endl;
+    std::cout << "==========================================\n" << std::endl;
 }

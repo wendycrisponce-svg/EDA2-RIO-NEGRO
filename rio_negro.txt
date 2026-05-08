@@ -1,0 +1,8 @@
+roca,cipolletti,bariloche,el_bolson,choele_choel,rio_colorado,san_antonio
+0,39,0,0,181,0,0
+39,0,444,0,0,0,0
+0,444,0,124,0,0,0
+0,0,124,0,0,0,0
+181,0,0,0,0,137,189
+0,0,0,0,137,0,0
+0,0,0,0,189,0,0
