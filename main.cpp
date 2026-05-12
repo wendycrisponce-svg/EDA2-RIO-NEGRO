@@ -164,6 +164,31 @@ struct RutaResultado {
     std::vector<int> camino;
 };
 
+void guardarHistorialRuta(const std::vector<Nodo>& nodos, const RutaResultado& resultado) {
+    std::ofstream archivo("historial_rutas.txt", std::ios::app);
+
+    if (!archivo.is_open()) {
+        std::cout << "No se pudo abrir el archivo de historial.\n";
+        return;
+    }
+
+    archivo << "Ruta calculada: ";
+
+    for (unsigned int i = 0; i < resultado.camino.size(); i++) {
+        archivo << nodos[resultado.camino[i]].nombre;
+
+        if (i < resultado.camino.size() - 1) {
+            archivo << " -> ";
+        }
+    }
+
+    archivo << " | Distancia total: "
+            << resultado.distanciaTotal
+            << " km\n";
+
+    archivo.close();
+}
+
 // Algoritmo de Dijkstra que encuentra el camino más corto
 RutaResultado calcularDijkstra(const std::vector<Nodo>& nodos, int inicio, int fin) {
     int n = nodos.size();
@@ -429,6 +454,8 @@ void preguntarRuta(const std::vector<Nodo>& nodos) {
     double tiempoHoras = (double)resultado.distanciaTotal / 80.0;
     std::cout << "TIEMPO ESTIMADO DE VIAJE: " << tiempoHoras << " horas" << std::endl;
     std::cout << "==========================================\n" << std::endl;
+
+    guardarHistorialRuta(nodos, resultado);
 }
 
 //---------aporte wendy----------
