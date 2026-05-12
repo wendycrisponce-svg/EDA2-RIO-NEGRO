@@ -168,6 +168,7 @@ struct RutaResultado {
 // guarda en un archivo cada ruta calculada por el usuario
 void guardarHistorialRuta(const std::vector<Nodo>& nodos, const RutaResultado& resultado) {
     std::ofstream archivo("historial_rutas.txt", std::ios::app);
+     // abre el archivo en modo agregar sin borrar datos anteriores
 
     if (!archivo.is_open()) {
         std::cout << "No se pudo abrir el archivo de historial.\n";
@@ -176,6 +177,7 @@ void guardarHistorialRuta(const std::vector<Nodo>& nodos, const RutaResultado& r
 
     archivo << "Ruta calculada: ";
 
+    // guarda el recorrido ciudad por ciudad
     for (unsigned int i = 0; i < resultado.camino.size(); i++) {
         archivo << nodos[resultado.camino[i]].nombre;
 
