@@ -164,6 +164,8 @@ struct RutaResultado {
     std::vector<int> camino;
 };
 
+//----------aporte de LEANDRO------------
+// guarda en un archivo cada ruta calculada por el usuario
 void guardarHistorialRuta(const std::vector<Nodo>& nodos, const RutaResultado& resultado) {
     std::ofstream archivo("historial_rutas.txt", std::ios::app);
 
@@ -189,6 +191,7 @@ void guardarHistorialRuta(const std::vector<Nodo>& nodos, const RutaResultado& r
     archivo.close();
 }
 
+// -------Aporte de KEVIN ------
 // Algoritmo de Dijkstra que encuentra el camino más corto
 RutaResultado calcularDijkstra(const std::vector<Nodo>& nodos, int inicio, int fin) {
     int n = nodos.size();
