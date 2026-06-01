@@ -123,6 +123,16 @@ bool guardarDatos(std::vector<Nodo> &nodos)
 
 void borrarNodo(std::vector<Nodo> &nodos, unsigned int index)
 {
+    //-------wendy----------------------
+    //pequeño cambio si se borra una ciudad
+    if (index < 0 || index >= nodos.size())
+         {
+        std::cout << "Indice invalido.\n";
+        return;
+         }
+     //-----fin-----wendy----------------------
+
+
 	unsigned int numNodos = nodos.size();
 
 	for (unsigned int fila = 0; fila < numNodos; fila++)
@@ -208,37 +218,62 @@ RutaResultado calcularDijkstra(const std::vector<Nodo>& nodos, int inicio, int f
     return res;
 }
 
-//----aporte wendy
+//----aporte wendy----------------------
 RutaResultado calcularRutaConContingencias(const std::vector<Nodo>& nodos, int inicio, int fin);
  void cortarRuta(std::vector<Nodo>& nodos, int origen, int destino);
-//----------
 
+ void habilitarRuta (std::vector<Nodo>& nodos,
+                   const std::vector<Nodo>& nodosOriginales);
+//----------fin------------wendy--------------
+
+//--------------------FUNCIONES QUE FALTA DESARROLLAR---
+//LUEGO DE REALIZAR BORRAR ESTE COMENTARIO
+
+/*
+agregarNodo();
+modificarNodo();
+crearRuta();
+modificarRuta();
+guardarHistorial();
+*/
+//-----------------LUEGO DE REALIZAR ESTAS FUNCIONES BORRAR ESTE COMENTARIO
+
+
+
+
+//--------------------------------------MAIN---------------------------------------------
 int main()
 {
 	std::vector<Nodo> nodos;
+	//--------wendy--------
+	//agregue esto asi cuando se quiere volver a habilitar la ruta pueda hacerse
+		std::vector<Nodo> nodosOriginales;
 
 	if (!cargarDatos(nodos))
 	{
 		return 1;
 	}
 
+//agregue esto asi cuando se quiere volver a habilitar la ruta pueda hacerse
+nodosOriginales = nodos;
 
 //----------aporte de WENDY------------
 //menu inicial que usara el usuario.
 
 //opcion para guarda la opcion
-int opcion;
+int opcion=0;
 
-while(opcion!=6){
+while(opcion!=7){
     std::cout << "\n==========================================\n" ;
     std::cout << "    MENU \n" ;
     std::cout << "==========================================\n" ;
     std::cout <<"1) calcular ruta\n";
     std::cout <<"2) calcular ruta con contigencias\n";//corte de rutas
     std::cout <<"3)cortar ruta\n";//usuario indica que se corto la ruta.
-    std::cout <<"4)borrar ciudad\n";
-    std::cout <<"5)ver nodos\n";//no se si va, quede en duda
-    std::cout <<"6)guardar y salir\n";
+    std::cout <<"4)habilitar ruta\n";//se habilita la ruta cortada si el usu ya sabe cual es...
+    std::cout <<"5)borrar ciudad\n";
+    std::cout <<"6)ver nodos\n";
+    std::cout <<"7)guardar y salir\n";
     std::cout <<"SELECCIONE UNA OPCION:\t";
     std::cin >>opcion;
     //case para que ejecute la opcion indicada
@@ -247,16 +282,13 @@ while(opcion!=6){
     case 1: preguntarRuta(nodos);break;
     case 2:
         {
+     std::cout << "\nCiudades disponibles:\n";
 
-        std:: cout <<" Ciudades disponibles:\n";
-        std:: cout <<"0 - viedma\n";
-        std:: cout <<"1 - roca\n";
-        std:: cout <<"2 - cipolletti\n";
-        std:: cout <<"3 - bariloche\n";
-        std:: cout <<"4 - el_bolson\n";
-        std:: cout <<"5 - choele_choel\n";
-        std:: cout <<"6 - rio_colorado\n";
-        std:: cout <<"7 - san_antonio\n";
+    for (int i = 0; i < nodos.size(); i++)
+    {
+        std::cout << i << " - " << nodos[i].nombre << std::endl;
+    }
+
          int salida, destino;
         std:: cout <<"ingrese la ciudad de salida:\t";
         std::cin >>salida;
@@ -275,16 +307,12 @@ while(opcion!=6){
     }
     case 3:
         {
+     std::cout << "\nCiudades disponibles:\n";
 
-        std:: cout <<" Ciudades disponibles:\n";
-        std:: cout <<"0 - viedma\n";
-        std:: cout <<"1 - roca\n";
-        std:: cout <<"2 - cipolletti\n";
-        std:: cout <<"3 - bariloche\n";
-        std:: cout <<"4 - el_bolson\n";
-        std:: cout <<"5 - choele_choel\n";
-        std:: cout <<"6 - rio_colorado\n";
-        std:: cout <<"7 - san_antonio\n";
+    for (int i = 0; i < nodos.size(); i++)
+    {
+        std::cout << i << " - " << nodos[i].nombre << std::endl;
+    }
           int origen,destino;
           std::cout <<"ingrese ciudad de origen:";
           std::cin >>origen;
@@ -294,21 +322,32 @@ while(opcion!=6){
           //  la ruta fue cortada
     std::cout << "Ruta cortada. Si intenta calcular ahora, se ignorará esa conexión.\n";
 
-
         break;
         }
-    case 4:
+         case 4:
+    habilitarRuta(nodos, nodosOriginales);
+    break;
+
+    case 5:
         {
-          int indicaBorrar;
-          std::cout <<"ingrese ciudad a borrar:";
-          std::cin >>indicaBorrar;
-          //no lo probe
-          //borrarNodo(nodos,indicaBorrar);
-          std::cout <<"proximante";//a comentar
+          int indiceBorrar;
+
+    std::cout << "\nCiudades disponibles:\n";
+
+    for (int i = 0; i < nodos.size(); i++)
+    {
+        std::cout << i << " - " << nodos[i].nombre << std::endl;
+    }
+
+    std::cout << "\nIngrese el indice de la ciudad a borrar: ";
+    std::cin >> indiceBorrar;
+
+    borrarNodo(nodos, indiceBorrar);
+    borrarNodo(nodosOriginales, indiceBorrar);
        break;
     }
-    case 5: imprimirNodos(nodos);break;
-    case 6://guardarDatos(nodos);
+    case 6: imprimirNodos(nodos);break;
+    case 7://guardarDatos(nodos);
     std::cout <<"proximante\n";//a comentar
     std::cout <<"guardando datos...saliendo\n";
     break;
@@ -327,7 +366,7 @@ y no del programador*/
 */
 
 
-
+//----------------wendy---------lo comente
  //----------aporte de SEBASTIAN------------
 	 // borrarNodo(nodos, 7); aca hay un error No existe la ciudad 7 Y el programa se rompe.
 	 if (!nodos.empty()) {
@@ -341,6 +380,7 @@ y no del programador*/
 
 	return 0;
 }
+//--------------------------------------FIN----MAIN---------------------------------------------
 
 
 //----------aporte de WENDY------------
@@ -444,9 +484,9 @@ void cortarRuta(std::vector<Nodo>& nodos, int origen, int destino) {
     if (origen >= 0 && origen < nodos.size() &&
         destino >= 0 && destino < nodos.size()) {
 
-        nodos[origen].distancias[destino] = INT_MAX;
-        nodos[destino].distancias[origen] = INT_MAX; // bidireccional
 
+   nodos[origen].distancias[destino] = 0;//pequeña modificacion =0
+       nodos[destino].distancias[origen] = 0;//asi usar los datos de dijkstra por que antes no los usaba bien
         std::cout << "ruta entre " << nodos[origen].nombre
                   << " y " << nodos[destino].nombre
                   << " marcada como CORTADA.\n";
@@ -454,3 +494,39 @@ void cortarRuta(std::vector<Nodo>& nodos, int origen, int destino) {
         std::cout << "indices invalidos.\n";
     }
 }
+
+//------------wendy-----------
+//nueba funcion que habilita las rutas cortadas usando salida, destino y la km
+void habilitarRuta (std::vector<Nodo>& nodos,
+                   const std::vector<Nodo>& nodosOriginales){
+
+
+    int origen, destino;
+    unsigned int distancia;
+
+    std::cout << "Ingrese origen: ";
+    std::cin >> origen;
+
+    std::cout << "Ingrese destino: ";
+    std::cin >> destino;
+
+    std::cout << "Ingrese la distancia original: ";
+    std::cin >> distancia;
+
+    if (origen >= 0 && origen < nodos.size() &&
+        destino >= 0 && destino < nodos.size())
+    {
+        nodos[origen].distancias[destino] = distancia;
+        nodos[destino].distancias[origen] = distancia;
+
+        std::cout << "Ruta habilitada.\n";
+    }
+    else
+    {
+        std::cout << "Indices invalidos.\n";
+    }
+}
+
+
+
+//-----fin--------wendy-------
