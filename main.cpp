@@ -325,8 +325,8 @@ void preguntarRuta(const std::vector<Nodo>& nodos) {
 
     std::cout << "\n\nDISTANCIA TOTAL OPTIMIZADA: " << resultado.distanciaTotal << " km" << std:: endl;
 
-    // Cálculo extra basado en los datos de camiones (80 km/h) [cite: 102]
-    double tiempoHoras = (double)resultado.distanciaTotal / 80.0;
+    // Cálculo extra basado en los datos de camiones (80 km/h) 
+	 double tiempoHoras = (double)resultado.distanciaTotal / 80.0;
     std::cout << "TIEMPO ESTIMADO DE VIAJE: " << tiempoHoras << " horas" << std::endl;
     std::cout << "==========================================\n" << std::endl;
 }
