@@ -208,6 +208,74 @@ RutaResultado calcularDijkstra(const std::vector<Nodo>& nodos, int inicio, int f
     return res;
 }
 
+
+
+//----aporte wendy----------------------
+RutaResultado calcularRutaConContingencias(const std::vector<Nodo>& nodos, int inicio, int fin);
+ void cortarRuta(std::vector<Nodo>& nodos, int origen, int destino);
+
+ void habilitarRuta (std::vector<Nodo>& nodos,
+                   const std::vector<Nodo>& nodosOriginales);
+//----------fin------------wendy--------------
+// funcion agregarNodo-----kevin------inicio
+
+void agregarNodo(std::vector<Nodo> &nodos)
+{
+    std::string nombreNuevaCiudad; //creo la variable
+    
+    std::cout << "\nIngrese el nombre de la nueva ciudad: "; //pregunto el nombre
+
+
+    // std::cin >> nombreNuevaCiudad; si uso cin y pongo una ciudad con espacios el programa se vuelve loco
+    //por que cin lee hasta el primer espacio y lo que queda despues es basura que una vez que el menu se reinicia lo lee infinitamente
+   
+
+    std::cin.ignore(1000, '\n'); // Ignora hasta 1000 caracteres de basura, o hasta encontrar el Enter  
+    
+    
+    std::getline(std::cin, nombreNuevaCiudad); //Leemos la respuesta completa con espacios incluidos
+
+    // a cada ciudad que existe, le agregamos una nueva ruta hacia la ciudad nueva con distancia 0
+    for (unsigned int fila = 0; fila < nodos.size(); fila++)
+    {
+     nodos[fila].distancias.push_back(0); 
+    }
+
+    // Creamos una nueva ciudad 
+    Nodo nuevaCiudad;
+      nuevaCiudad.nombre = nombreNuevaCiudad;
+
+    //  Le asignamos sus propias distancias hacia las otras ciudades.
+    
+    for (unsigned int columna = 0; columna <= nodos.size(); columna++)
+    {
+     nuevaCiudad.distancias.push_back(0);
+    }
+
+    
+    nodos.push_back(nuevaCiudad);//  insertamos la nueva ciudad al final de la lista principal
+
+    std::cout << "Ciudad '" << nombreNuevaCiudad << "' agregada con exito al sistema.\n";
+}
+//---------funcion agregarNodo----FIN
+
+//--------------------FUNCIONES QUE FALTA DESARROLLAR---
+//LUEGO DE REALIZAR BORRAR ESTE COMENTARIO
+
+/*
+
+modificarNodo();
+crearRuta();
+modificarRuta();
+guardarHistorial();
+*/
+//-----------------LUEGO DE REALIZAR ESTAS FUNCIONES BORRAR ESTE COMENTARIO
+
+
+
+
+//--------------------------------------MAIN---------------------------------------------
+
 int main()
 {
 	std::vector<Nodo> nodos;
@@ -217,6 +285,113 @@ int main()
 		return 1;
 	}
 //----------aporte de WENDY------------
+
+
+
+//opcion para guarda la opcion
+int opcion=0;
+
+while(opcion!=8){
+    std::cout << "\n==========================================\n" ;
+    std::cout << "    MENU \n" ;
+    std::cout << "==========================================\n" ;
+    std::cout <<"1) calcular ruta\n";
+    std::cout <<"2) calcular ruta con contigencias\n";//corte de rutas
+    std::cout <<"3)cortar ruta\n";//usuario indica que se corto la ruta.
+    std::cout <<"4)habilitar ruta\n";//se habilita la ruta cortada si el usu ya sabe cual es...
+    std::cout <<"5)borrar ciudad\n";
+    std::cout <<"6)ver nodos\n";
+    std::cout <<"7) agregar ciudad\n"; // funcion agregarNodo()
+    std::cout <<"8) guardar y salir\n"; 
+    std::cout <<"SELECCIONE UNA OPCION:\t";
+    std::cin >>opcion;
+    //case para que ejecute la opcion indicada
+    switch(opcion)
+    {
+    case 1: preguntarRuta(nodos);break;
+    case 2:
+        {
+     std::cout << "\nCiudades disponibles:\n";
+
+    for (int i = 0; i < nodos.size(); i++)
+    {
+        std::cout << i << " - " << nodos[i].nombre << std::endl;
+    }
+
+         int salida, destino;
+        std:: cout <<"ingrese la ciudad de salida:\t";
+        std::cin >>salida;
+        std:: cout <<"ingrese la ciudad de destino:\t";
+        std::cin >>destino;
+  RutaResultado res = calcularRutaConContingencias(nodos, salida, destino);
+
+           if (res.distanciaTotal == INT_MAX) {
+        std::cout << "No existe ruta disponible (posible corte).\n";
+    } else {
+        std::cout << "Ruta optimizada con contingencias: " << res.distanciaTotal << " km\n";
+    }
+
+
+    break;
+    }
+    case 3:
+        {
+     std::cout << "\nCiudades disponibles:\n";
+
+    for (int i = 0; i < nodos.size(); i++)
+    {
+        std::cout << i << " - " << nodos[i].nombre << std::endl;
+    }
+          int origen,destino;
+          std::cout <<"ingrese ciudad de origen:";
+          std::cin >>origen;
+          std::cout <<"ingrese ciudad destino";
+          std::cin >>destino;
+          cortarRuta(nodos,origen,destino);
+          //  la ruta fue cortada
+    std::cout << "Ruta cortada. Si intenta calcular ahora, se ignorará esa conexión.\n";
+
+        break;
+        }
+         case 4:
+    habilitarRuta(nodos, nodosOriginales);
+    break;
+
+    case 5:
+        {
+          int indiceBorrar;
+
+    std::cout << "\nCiudades disponibles:\n";
+
+    for (int i = 0; i < nodos.size(); i++)
+    {
+        std::cout << i << " - " << nodos[i].nombre << std::endl;
+    }
+
+    std::cout << "\nIngrese el indice de la ciudad a borrar: ";
+    std::cin >> indiceBorrar;
+
+    borrarNodo(nodos, indiceBorrar);
+    borrarNodo(nodosOriginales, indiceBorrar);
+       break;
+    }
+    case 6: imprimirNodos(nodos);break;
+	case 7:
+        agregarNodo(nodos);
+        // Sincronizamos las copias de seguridad  para que no se rompan las contingencias
+        nodosOriginales = nodos; 
+        break;
+    case 8://guardarDatos(nodos);
+    std::cout <<"proximante\n";//a comentar
+    std::cout <<"guardando datos...saliendo\n";
+    break;
+
+    default: std::cout <<"opcion invalida\n";
+
+    }
+
+}
+//-----------fin menu
 
 /*mini "menu" para preguntar y calcular ruta desde el usuario
 y no del programador*/
