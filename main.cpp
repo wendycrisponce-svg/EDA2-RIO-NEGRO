@@ -235,7 +235,7 @@ void agregarNodo(std::vector<Nodo> &nodos)
     
     std::getline(std::cin, nombreNuevaCiudad); //Leemos la respuesta completa con espacios incluidos
 
-    // a cada ciudad que existe, le agregamos una nueva ruta hacia la ciudad nueva con distancia 0
+    //  a cada ciudad que existe, le agregamos una nueva ruta hacia la ciudad nueva con distancia 0
     for (unsigned int fila = 0; fila < nodos.size(); fila++)
     {
      nodos[fila].distancias.push_back(0); 
