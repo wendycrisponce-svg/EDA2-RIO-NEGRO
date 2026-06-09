@@ -210,6 +210,7 @@ RutaResultado calcularDijkstra(const std::vector<Nodo>& nodos, int inicio, int f
 
 
 
+
 //----aporte wendy----------------------
 RutaResultado calcularRutaConContingencias(const std::vector<Nodo>& nodos, int inicio, int fin);
  void cortarRuta(std::vector<Nodo>& nodos, int origen, int destino);
@@ -275,6 +276,12 @@ guardarHistorial();
 
 
 //--------------------------------------MAIN---------------------------------------------
+======
+//----aporte wendy
+RutaResultado calcularRutaConContingencias(const std::vector<Nodo>& nodos, int inicio, int fin);
+ void cortarRuta(std::vector<Nodo>& nodos, int origen, int destino);
+//----------
+
 
 int main()
 {
@@ -284,9 +291,10 @@ int main()
 	{
 		return 1;
 	}
+
+
 //----------aporte de WENDY------------
-
-
+//menu inicial que usara el usuario.
 
 //opcion para guarda la opcion
 int opcion=0;
@@ -391,16 +399,20 @@ while(opcion!=8){
     }
 
 }
+
+
+
+
 //-----------fin menu
 
 /*mini "menu" para preguntar y calcular ruta desde el usuario
 y no del programador*/
 
- preguntarRuta(nodos);
-
  /*al imprimir la distancia entre las cuidades
  se imprime el cuadro completo de todas las ciudades.
 */
+
+
 
  //----------aporte de SEBASTIAN------------
 	 // borrarNodo(nodos, 7); aca hay un error No existe la ciudad 7 Y el programa se rompe.
@@ -408,9 +420,10 @@ y no del programador*/
     borrarNodo(nodos, 0); // Borra la primera ciudad (Viedma) de forma segura
 }
 
-	imprimirNodos(nodos);
+	//imprimirNodos(nodos);
 
-	guardarDatos(nodos);
+	//guardarDatos(nodos);
+
 
 	return 0;
 }
@@ -420,10 +433,6 @@ y no del programador*/
 /*
 lo separe en 2 funciones para que en caso de editarse
 sea mas facil de hacerlo.
- */
-
-
-/*
 es la que calcula la distancia entre dos nodos (ciudades)
    luego de que el USUARIO indica de donde sale y a donde va
    usando los datos ya guardados
@@ -438,7 +447,7 @@ int obtenerDistancia(const std::vector<Nodo>& nodos, int salida, int destino)
    hize que usando los datos guardados para que se cree una lista de las ciudades
    e indicando con un numero sea mas facil
    para el usuario indicar donde esta y a donde quiere ir
-   
+
 void preguntarRuta(const std::vector<Nodo>& nodos) {
     int salida, destino;
 
@@ -462,7 +471,9 @@ void preguntarRuta(const std::vector<Nodo>& nodos) {
     std::cout << "Distancia a recorrer: " << distancia << " km\n";
       std::cout << "\n";
 }*/
-// aporte de kevin:modifique la funcion de salida para que sea mas grafico y el dijkstra pueda apreciearse 
+
+// ------aporte de kevin:
+//modifique la funcion de salida para que sea mas grafico y el dijkstra pueda apreciearse
 void preguntarRuta(const std::vector<Nodo>& nodos) {
     int salida, destino;
 
@@ -477,8 +488,8 @@ void preguntarRuta(const std::vector<Nodo>& nodos) {
     std::cout << "Ingrese el numero de la ciudad de destino: ";
     std::cin >> destino;
 
-    
-    // Llamamos al algoritmo 
+
+    // Llamamos al algoritmo
     RutaResultado resultado = calcularDijkstra(nodos, salida, destino);
 
     std::cout << "\n==========================================" << std::endl;
@@ -492,7 +503,7 @@ void preguntarRuta(const std::vector<Nodo>& nodos) {
     for (int i = 0; i < resultado.camino.size(); i++) {
         int id = resultado.camino[i];
         std::cout << nodos[id].nombre;
-        
+
         if (i < resultado.camino.size() - 1) {
             std::cout << " -> "; // Flecha entre ciudades
         }
@@ -504,4 +515,28 @@ void preguntarRuta(const std::vector<Nodo>& nodos) {
 	 double tiempoHoras = (double)resultado.distanciaTotal / 80.0;
     std::cout << "TIEMPO ESTIMADO DE VIAJE: " << tiempoHoras << " horas" << std::endl;
     std::cout << "==========================================\n" << std::endl;
+}
+
+//---------aporte wendy----------
+//funcion para calcular ruta cuando el usuario dice que esta cortada.
+RutaResultado calcularRutaConContingencias(const std::vector<Nodo>& nodos, int inicio, int fin) {
+
+    // Llama a la funcion ooriginal que creo kevin y realizar el corte para recalculo.
+    return calcularDijkstra(nodos, inicio, fin);
+}
+
+//funcion corte  de ruta   esto lo inidca el usuario y alli marca que se corto la ruta.
+void cortarRuta(std::vector<Nodo>& nodos, int origen, int destino) {
+    if (origen >= 0 && origen < nodos.size() &&
+        destino >= 0 && destino < nodos.size()) {
+
+        nodos[origen].distancias[destino] = INT_MAX;
+        nodos[destino].distancias[origen] = INT_MAX; // bidireccional
+
+        std::cout << "ruta entre " << nodos[origen].nombre
+                  << " y " << nodos[destino].nombre
+                  << " marcada como CORTADA.\n";
+    } else {
+        std::cout << "indices invalidos.\n";
+    }
 }
