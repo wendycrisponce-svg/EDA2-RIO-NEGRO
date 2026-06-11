@@ -302,7 +302,9 @@ int main()
 //opcion para guarda la opcion
 int opcion=0;
 
+
 while(opcion!=10){
+
     std::cout << "\n==========================================\n" ;
     std::cout << "    MENU \n" ;
     std::cout << "==========================================\n" ;
@@ -556,9 +558,9 @@ void cortarRuta(std::vector<Nodo>& nodos, int origen, int destino) {
                   << " marcada como CORTADA.\n";
     } else {
         std::cout << "Indices invalidos.\n";
+
     }
 }
-
 
 //muestra que rutas estan cortadas y son posibles habiitar nuevamente.
 void mostrarRutasCortadas(const std::vector<Nodo>& nodos,
