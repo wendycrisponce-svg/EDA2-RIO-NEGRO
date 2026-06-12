@@ -152,10 +152,6 @@ void imprimirNodos(std::vector<Nodo> &nodos)
 	}
 }
 
-//----------aporte de WENDY------------
-// declaracion de la funcion
-void preguntarRuta(const std::vector<Nodo>& nodos);
-
 // -------Aporte de KEVIN ------
 
 // Estructura que almacena el resultado final
@@ -163,6 +159,18 @@ struct RutaResultado {
     int distanciaTotal;
     std::vector<int> camino;
 };
+
+//----------aporte de WENDY------------
+// declaracion de la funcion
+void preguntarRuta(const std::vector<Nodo>& nodos);
+
+//----------aporte de LEANDRO------------
+void guardarHistorialRuta(const std::vector<Nodo>& nodos,
+                          int origen,
+                          int destino,
+                          const RutaResultado& resultado);
+
+void mostrarHistorial();
 
 // Algoritmo de Dijkstra que encuentra el camino más corto
 RutaResultado calcularDijkstra(const std::vector<Nodo>& nodos, int inicio, int fin) {
@@ -214,10 +222,9 @@ RutaResultado calcularDijkstra(const std::vector<Nodo>& nodos, int inicio, int f
 RutaResultado calcularRutaConContingencias(const std::vector<Nodo>& nodos, int inicio, int fin);
  void cortarRuta(std::vector<Nodo>& nodos, int origen, int destino);
 
- void habilitarRuta (std::vector<Nodo>& nodos,
-                   const std::vector<Nodo>& nodosOriginales);
+
 //----------fin------------wendy--------------
-void mostrarRutasCortadas(const std::vector<Nodo>& nodos, const std::vector<Nodo>& nodosOriginales);//aviso al compilador que la funcion existe mas abajo
+
 // funcion agregarNodo-----kevin------inicio
 
 void agregarNodo(std::vector<Nodo> &nodos)
@@ -260,25 +267,72 @@ void agregarNodo(std::vector<Nodo> &nodos)
 }
 //---------funcion agregarNodo----FIN
 
+// funcion modificarNodo-----kevin------inicio
+void modificarNodo(std::vector<Nodo>&nodos){
+    int indiceCiudad;
+   
+   for (int i = 0; i < nodos.size(); i++)
+    {
+        std::cout << i << " - "<< nodos[i].nombre<< std::endl;
+    }
+
+    std::cout<<"\n¿Que ciudad queres modificar?: ";
+    std::cin >> indiceCiudad;
+    std::cin.ignore(1000,'\n');
+    std::string nuevoNombre;
+    std::cout <<"escribi el nuevo nombre:";
+    std::getline(std::cin,nuevoNombre);//permite espacios
+    nodos[indiceCiudad].nombre=nuevoNombre;
+};
+
+//funcion modificarNodo ----fin
 //--------------------FUNCIONES QUE FALTA DESARROLLAR---
+
 //LUEGO DE REALIZAR BORRAR ESTE COMENTARIO
 
 /*
 
-modificarNodo();
+
 crearRuta();
 modificarRuta();
 guardarHistorial();
 */
 //-----------------LUEGO DE REALIZAR ESTAS FUNCIONES BORRAR ESTE COMENTARIO
+//--------wendy
+//struct para guardar datos sobre rutas reales.
+struct informaRuta{
+   int origen;
+   int destino;
+   std:: string nombreRuta;
+
+};
 
 
+void mostrarRutasCortadas(
+    const std::vector<Nodo>& nodos,  const std::vector<Nodo>& nodosOriginales,  const std::vector<informaRuta>& rutasReales);
 
+ void habilitarRuta (std::vector<Nodo>& nodos,const std::vector<Nodo>& nodosOriginales,const std::vector<informaRuta>& rutasReales);
+
+
+void crearRuta(std::vector<Nodo>& nodos, std::vector<informaRuta>& rutasReales);
 
 //--------------------------------------MAIN---------------------------------------------
 
 int main()
 {
+	//---wendy
+	//carga de datos manuales de rutas ya registradas como conexion de ciudades base
+	 std:: vector<informaRuta>rutasReales
+    {
+       {0,7, "RN 3"},
+       {1,2, "RN 22"},
+       {1,5, "RN 22"},
+       {2,3, "RN 237"},
+       {3,4, "RN 40"},
+       {5,6, "RN 22"},
+       {5,7, "RN 250"},
+    };
+
 	std::vector<Nodo> nodos;
     std::vector<Nodo> nodosOriginales;
 	if (!cargarDatos(nodos))
@@ -293,7 +347,9 @@ int main()
 //opcion para guarda la opcion
 int opcion=0;
 
-while(opcion!=9){
+
+while(opcion!=12){
+
     std::cout << "\n==========================================\n" ;
     std::cout << "    MENU \n" ;
     std::cout << "==========================================\n" ;
@@ -305,7 +361,10 @@ while(opcion!=9){
     std::cout <<"6) borrar ciudad\n";
     std::cout <<"7) ver nodos\n";
     std::cout <<"8) agregar ciudad\n"; // funcion agregarNodo()
-    std::cout <<"9) guardar y salir\n"; 
+    std::cout <<"9) modificar ciudad\n";// funcion modificarNodo()
+    std::cout <<"10) ver historial\n";
+	std::cout <<"11) Crear Ruta\n";
+    std::cout <<"12) guardar y salir\n";
     std::cout <<"SELECCIONE UNA OPCION:\t";
     std::cin >>opcion;
     //case para que ejecute la opcion indicada
@@ -337,31 +396,54 @@ while(opcion!=9){
 
     break;
     }
-    case 3:
-        {
-     std::cout << "\nCiudades disponibles:\n";
+   case 3:
+{
+    std::cout << "\n===== RUTAS DISPONIBLES =====\n";
 
-    for (int i = 0; i < nodos.size(); i++)
+    for (int i = 0; i < rutasReales.size(); i++)
     {
-        std::cout << i << " - " << nodos[i].nombre << std::endl;
+        std::cout
+            << i << " - "
+            << rutasReales[i].nombreRuta
+            << " ("
+            << nodos[rutasReales[i].origen].nombre
+            << " <-> "
+            << nodos[rutasReales[i].destino].nombre
+            << ")"
+            << std::endl;
     }
-          int origen,destino;
-          std::cout <<"ingrese ciudad de origen:";
-          std::cin >>origen;
-          std::cout <<"ingrese ciudad destino";
-          std::cin >>destino;
-          cortarRuta(nodos,origen,destino);
-          //  la ruta fue cortada
-    std::cout << "Ruta cortada. Si intenta calcular ahora, se ignorará esa conexión.\n";
 
-        break;
+    int opcionRuta;
+
+    std::cout << "\nIngrese el numero de la ruta cortada: ";
+    std::cin >> opcionRuta;
+
+    if (opcionRuta >= 0 &&
+        opcionRuta < rutasReales.size())
+    {
+        int origen = rutasReales[opcionRuta].origen;
+        int destino = rutasReales[opcionRuta].destino;
+
+        cortarRuta(nodos, origen, destino);
+
+        std::cout
+            << "Ruta "
+            << rutasReales[opcionRuta].nombreRuta
+            << " cortada correctamente.\n";
+    }
+    else
+    {
+        std::cout << "Opcion invalida.\n";
+    }
+
+    break;
         }
          case 4:
-    habilitarRuta(nodos, nodosOriginales);
+    habilitarRuta(nodos, nodosOriginales,rutasReales);
     break;
     
     case 5:
-        mostrarRutasCortadas(nodos, nodosOriginales);
+        mostrarRutasCortadas(nodos, nodosOriginales,rutasReales);
         break;
 
     case 6:
@@ -385,13 +467,21 @@ while(opcion!=9){
     case 7: imprimirNodos(nodos);break;
 	case 8:
         agregarNodo(nodos);
-        // Sincronizamos las copias de seguridad  para que no se rompan las contingencias
-        nodosOriginales = nodos; 
+        nodosOriginales = nodos;
         break;
-    case 9:guardarDatos(nodos);
-    std::cout <<"proximante\n";//a comentar
-    std::cout <<"guardando datos...saliendo\n";
-    break;
+    case 9:
+         modificarNodo(nodos);
+        break;
+    case 10:
+        mostrarHistorial();
+        break;
+ case 11:
+        crearRuta(nodos, rutasReales);
+        break;
+    case 12:
+        guardarDatos(nodos);
+        std::cout <<"guardando datos...saliendo\n";
+        break;
 
     default: std::cout <<"opcion invalida\n";
 
@@ -422,8 +512,77 @@ y no del programador*/
 	return 0;
 }
 
-
 //----------aporte de WENDY------------
+
+//contiene las ciudades y sus nodos y las rs relacionadas a ellos
+void crearRuta(std::vector<Nodo>& nodos,std::vector<informaRuta>& rutasReales)
+{
+	//salida y destino 
+    int origen, destino;
+    unsigned int distancia;//distancia en km
+    std::string nombreRuta;// se pide nombre de esa ruta.
+
+    std::cout << "\t---------- CREAR RUTA -------\n";
+
+	//imprime las ciudades disponibles  asi el usu elige correctamente
+    for (int i = 0; i < nodos.size(); i++)
+    {
+        std::cout << i << " - "<< nodos[i].nombre<< std::endl;
+    }
+
+    std::cout << "\nIngrese ciudad origen: ";
+    std::cin >> origen;
+
+    std::cout << "Ingrese ciudad destino: ";
+    std::cin >> destino;
+
+	//si los datos ingresados no corresponde a la cantidades de cuidades cargadas lo informa
+    if (origen < 0 || origen >= nodos.size() ||destino < 0 || destino >= nodos.size())
+    {
+        std::cout << "Indices invalidos.\n";
+        return;
+    }
+//informa si el usu quiere ingresar la misma ciudad sobre si misma
+    if (origen == destino)
+    {
+        std::cout << "No puede conectar una ciudad consigo misma.\n";
+        return;
+    }
+//si la ruta existe tambien lo informa, evita reescribir un dato
+    if (nodos[origen].distancias[destino] != 0)
+    {
+        std::cout << "La ruta ya existe.\n";
+        return;
+    }
+//pide que ingrese km ya que se da por hecho que sabe la distancia
+    std::cout << "Ingrese distancia en km: ";
+    std::cin >> distancia;
+//si km es menor a 0 se informa como invalido
+    if (distancia == 0)
+    {
+        std::cout << "Distancia invalida.\n";
+        return;
+    }
+//limpia el buffer  
+    std::cin.ignore(1000, '\n');
+// se le pide la ruta ya que se da por heco que tambien sbe el nombre
+    std::cout << "Ingrese nombre de la ruta: ";
+    std::getline(std::cin, nombreRuta);
+//se actualizan las matriz en ambos sentidos
+    nodos[origen].distancias[destino] = distancia;
+    nodos[destino].distancias[origen] = distancia;
+
+    informaRuta nuevaRuta;// se crea una estrucura vacia que se va a llenar de los datos
+// se guardan los datos
+    nuevaRuta.origen = origen;
+    nuevaRuta.destino = destino;
+    nuevaRuta.nombreRuta = nombreRuta;
+
+    rutasReales.push_back(nuevaRuta);//se guarda en el vector
+
+    std::cout << "\nRuta creada correctamente.\n";//dice que se ejecuto esta funcion
+}
+
 /*
 lo separe en 2 funciones para que en caso de editarse
 sea mas facil de hacerlo.
@@ -511,6 +670,8 @@ void preguntarRuta(const std::vector<Nodo>& nodos) {
 	 double tiempoHoras = (double)resultado.distanciaTotal / 80.0;
     std::cout << "TIEMPO ESTIMADO DE VIAJE: " << tiempoHoras << " horas" << std::endl;
     std::cout << "==========================================\n" << std::endl;
+    
+    guardarHistorialRuta(nodos, salida, destino, resultado);
 }
 //---------aporte wendy----------
 //funcion para calcular ruta cuando el usuario dice que esta cortada.
@@ -519,51 +680,69 @@ RutaResultado calcularRutaConContingencias(const std::vector<Nodo>& nodos, int i
     return calcularDijkstra(nodos, inicio, fin);
 }
 
-//funcion corte de ruta  esto lo indica el usuario y alli marca que se corto la ruta.
 void cortarRuta(std::vector<Nodo>& nodos, int origen, int destino) {
-    if (origen >= 0 && origen < nodos.size() &&
+ //busca los ciudades disponibles en el momento y verifica existencia
+	if (origen >= 0 && origen < nodos.size() &&
         destino >= 0 && destino < nodos.size()) {
 
-        // Validar que realmente exista una ruta directa antes de cortarla
+        // accede a los datos
         if (nodos[origen].distancias[destino] == 0) {
-            std::cout << "No existe una ruta directa entre " << nodos[origen].nombre 
+            std::cout << "No existe una ruta directa entre " << nodos[origen].nombre
                       << " y " << nodos[destino].nombre << " para cortar.\n";
             return;
         }
 
-        
+//busca la conexion y si es cero no existe, y si encuentra la corta
         nodos[origen].distancias[destino] = 0;
-        nodos[destino].distancias[origen] = 0; 
-
+        nodos[destino].distancias[origen] = 0;
+//imprime la respuesta de que encontro
         std::cout << "Ruta entre " << nodos[origen].nombre
                   << " y " << nodos[destino].nombre
                   << " marcada como CORTADA.\n";
     } else {
         std::cout << "Indices invalidos.\n";
+
     }
 }
 
 
-//muestra que rutas estan cortadas y son posibles habiitar nuevamente.
-void mostrarRutasCortadas(const std::vector<Nodo>& nodos,
-                          const std::vector<Nodo>& nodosOriginales)
+//muestra que rutas estan cortadas y son posibles habilitar nuevamente.
+void mostrarRutasCortadas(const std::vector<Nodo>& nodos,const std::vector<Nodo>& nodosOriginales, const std::vector<informaRuta>& rutasReales)
 {
     std::cout << "\n===== RUTAS CORTADAS =====\n";
 
     bool hayCortadas = false;
-
+//busca ciudades 
     for (int i = 0; i < nodos.size(); i++)
     {
+		//recorre las conecciones de las ciudaddes
         for (int j = i + 1; j < nodos.size(); j++)
         {
-            if (nodos[i].distancias[j] == 0 &&
-                nodosOriginales[i].distancias[j] > 0)
+			//busca si hay rutas cortadas actualmente
+            if (nodos[i].distancias[j] == 0 &&  nodosOriginales[i].distancias[j] > 0)
             {
+                std::string nombreRuta = "Desconocida";
+
+                // Buscar el nombre de la ruta
+                for (int k = 0; k < rutasReales.size(); k++)
+                {
+                    if (
+                        (rutasReales[k].origen == i &&
+                         rutasReales[k].destino == j)
+                        ||
+                        (rutasReales[k].origen == j &&
+                         rutasReales[k].destino == i)
+                       )
+                    {
+                        nombreRuta = rutasReales[k].nombreRuta;
+                        break;//corte para que no siga interando si encontro la ruta cortada
+                    }
+                }
+//imprime las rutas cortadas existentes
                 std::cout
-                    << i << " - "
+                    << nombreRuta << " : "
                     << nodos[i].nombre
                     << " <-> "
-                    << j << " - "
                     << nodos[j].nombre
                     << std::endl;
 
@@ -571,18 +750,19 @@ void mostrarRutasCortadas(const std::vector<Nodo>& nodos,
             }
         }
     }
-
+//de lo contrario informa que no se encuentra ninguan ruta cortada
     if (!hayCortadas)
     {
         std::cout << "No hay rutas cortadas.\n";
     }
 }
 
-//nueba funcion que habilita las rutas cortadas usando salida, destino y la km
-void habilitarRuta (std::vector<Nodo>& nodos,
-                   const std::vector<Nodo>& nodosOriginales){
+//nueva funcion que habilita las rutas cortadas usando salida, destino 
+//usa el vector nodosOriginales como guardado temporal de la ruta cortada
+void habilitarRuta (std::vector<Nodo>& nodos,  const std::vector<Nodo>& nodosOriginales,const std::vector<informaRuta>& rutasReales){
 
-    mostrarRutasCortadas(nodos, nodosOriginales);
+	//traigo esta funcion para que el usu vea que rutas puede habilitar
+    mostrarRutasCortadas(nodos, nodosOriginales, rutasReales);
     int origen, destino;
 
     std::cout << "Ingrese origen: ";
@@ -590,17 +770,77 @@ void habilitarRuta (std::vector<Nodo>& nodos,
 
     std::cout << "Ingrese destino: ";
     std::cin >> destino;
-
-  if (origen >= 0 && origen < nodos.size() &&
-        destino >= 0 && destino < nodos.size())
+//usando los datos de origen y destino comprueba existencia
+  if (origen >= 0 && origen < nodos.size() &&destino >= 0 && destino < nodos.size())
     {
+		//restablece en ambos sentidos
          nodos[origen].distancias[destino] = nodosOriginales[origen].distancias[destino];
         nodos[destino].distancias[origen] = nodosOriginales[destino].distancias[origen];
 
         std::cout << "Ruta habilitada.\n";
     }
+	  //de lo contrario informa que el usu uso datos invalidos
     else
     {
         std::cout << "Indices invalidos.\n";
     }
+}
+//----------aporte de LEANDRO------------
+// guarda cada ruta calculada en un archivo
+void guardarHistorialRuta(const std::vector<Nodo>& nodos,
+                          int origen,
+                          int destino,
+                          const RutaResultado& resultado)
+{
+    std::ofstream archivo("historial_rutas.txt", std::ios::app);
+
+    if (!archivo.is_open())
+    {
+        std::cout << "No se pudo abrir el archivo de historial.\n";
+        return;
+    }
+
+    archivo << "=====================================\n";
+    archivo << "Origen: " << nodos[origen].nombre << "\n";
+    archivo << "Destino: " << nodos[destino].nombre << "\n";
+    archivo << "Ruta: ";
+
+    for (unsigned int i = 0; i < resultado.camino.size(); i++)
+    {
+        archivo << nodos[resultado.camino[i]].nombre;
+
+        if (i < resultado.camino.size() - 1)
+        {
+            archivo << " -> ";
+        }
+    }
+
+    archivo << "\nDistancia total: "
+            << resultado.distanciaTotal
+            << " km\n";
+
+    archivo << "=====================================\n\n";
+
+    archivo.close();
+}
+
+// muestra el historial guardado
+void mostrarHistorial()
+{
+    std::ifstream archivo("historial_rutas.txt");
+
+    if (!archivo.is_open())
+    {
+        std::cout << "No hay historial guardado.\n";
+        return;
+    }
+
+    std::string linea;
+
+    while (getline(archivo, linea))
+    {
+        std::cout << linea << std::endl;
+    }
+
+    archivo.close();
 }
