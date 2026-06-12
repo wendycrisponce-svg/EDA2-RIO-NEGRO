@@ -267,12 +267,32 @@ void agregarNodo(std::vector<Nodo> &nodos)
 }
 //---------funcion agregarNodo----FIN
 
+// funcion modificarNodo-----kevin------inicio
+void modificarNodo(std::vector<Nodo>&nodos){
+    int indiceCiudad;
+   
+   for (int i = 0; i < nodos.size(); i++)
+    {
+        std::cout << i << " - "<< nodos[i].nombre<< std::endl;
+    }
+
+    std::cout<<"\n¿Que ciudad queres modificar?: ";
+    std::cin >> indiceCiudad;
+    std::cin.ignore(1000,'\n');
+    std::string nuevoNombre;
+    std::cout <<"escribi el nuevo nombre:";
+    std::getline(std::cin,nuevoNombre);//permite espacios
+    nodos[indiceCiudad].nombre=nuevoNombre;
+};
+
+//funcion modificarNodo ----fin
 //--------------------FUNCIONES QUE FALTA DESARROLLAR---
+
 //LUEGO DE REALIZAR BORRAR ESTE COMENTARIO
 
 /*
 
-modificarNodo();
+
 crearRuta();
 modificarRuta();
 guardarHistorial();
@@ -328,7 +348,7 @@ int main()
 int opcion=0;
 
 
-while(opcion!=11){
+while(opcion!=12){
 
     std::cout << "\n==========================================\n" ;
     std::cout << "    MENU \n" ;
@@ -341,9 +361,10 @@ while(opcion!=11){
     std::cout <<"6) borrar ciudad\n";
     std::cout <<"7) ver nodos\n";
     std::cout <<"8) agregar ciudad\n"; // funcion agregarNodo()
-    std::cout <<"9) ver historial\n";
-	std::cout <<"10) Crear Ruta\n";
-    std::cout <<"11) guardar y salir\n";
+    std::cout <<"9) modificar ciudad\n";// funcion modificarNodo()
+    std::cout <<"10) ver historial\n";
+	std::cout <<"11) Crear Ruta\n";
+    std::cout <<"12) guardar y salir\n";
     std::cout <<"SELECCIONE UNA OPCION:\t";
     std::cin >>opcion;
     //case para que ejecute la opcion indicada
@@ -448,14 +469,16 @@ while(opcion!=11){
         agregarNodo(nodos);
         nodosOriginales = nodos;
         break;
-
     case 9:
+         modificarNodo(nodos);
+        break;
+    case 10:
         mostrarHistorial();
         break;
- case 10:
+ case 11:
         crearRuta(nodos, rutasReales);
         break;
-    case 11:
+    case 12:
         guardarDatos(nodos);
         std::cout <<"guardando datos...saliendo\n";
         break;
