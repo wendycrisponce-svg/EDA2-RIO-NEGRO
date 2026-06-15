@@ -285,19 +285,6 @@ void modificarNodo(std::vector<Nodo>&nodos){
     nodos[indiceCiudad].nombre=nuevoNombre;
 };
 
-//funcion modificarNodo ----fin
-//--------------------FUNCIONES QUE FALTA DESARROLLAR---
-
-//LUEGO DE REALIZAR BORRAR ESTE COMENTARIO
-
-/*
-
-
-crearRuta();
-modificarRuta();
-guardarHistorial();
-*/
-//-----------------LUEGO DE REALIZAR ESTAS FUNCIONES BORRAR ESTE COMENTARIO
 //--------wendy
 //struct para guardar datos sobre rutas reales.
 struct informaRuta{
@@ -488,29 +475,10 @@ while(opcion!=12){
     }
 
 }
-//-----------fin menu
-
-/*mini "menu" para preguntar y calcular ruta desde el usuario
-y no del programador*/
-
-// preguntarRuta(nodos);
-
- /*al imprimir la distancia entre las cuidades
- se imprime el cuadro completo de todas las ciudades.
-*/
-
- //----------aporte de SEBASTIAN------------
-	 // borrarNodo(nodos, 7); aca hay un error No existe la ciudad 7 Y el programa se rompe.
-/*	 if (!nodos.empty()) {
-    borrarNodo(nodos, 0); // Borra la primera ciudad (Viedma) de forma segura
-}
-
-	imprimirNodos(nodos);
-
-	guardarDatos(nodos);*/
 
 	return 0;
 }
+//-----------fin menu
 
 //----------aporte de WENDY------------
 
@@ -598,36 +566,7 @@ int obtenerDistancia(const std::vector<Nodo>& nodos, int salida, int destino)
  {
     return nodos[salida].distancias[destino];
  }
-/*
-  es la funcion que pide al USUARIO que indique su lugar de salido(donde esta)
-   y a donde quiera llegar
-   hize que usando los datos guardados para que se cree una lista de las ciudades
-   e indicando con un numero sea mas facil
-   para el usuario indicar donde esta y a donde quiere ir
-   
-void preguntarRuta(const std::vector<Nodo>& nodos) {
-    int salida, destino;
 
-    std::cout << "Ciudades disponibles:\n";
-    for (unsigned int i = 0; i < nodos.size(); i++) {
-        std::cout << i << " - " << nodos[i].nombre << "\n";
-    }
-//pide que ingrese una opcion del 0 a 7
-    std::cout << "\nIngrese el numero de la ciudad de salida: ";
-    std::cin >> salida;
-
-    std::cout << "Ingrese el numero de la ciudad de destino: ";
-    std::cin >> destino;
-
-    // obtiene de la otra funcion "obtener distancia" el valor (km) de distancia
-    int distancia = obtenerDistancia(nodos, salida, destino);
-
-    //imprime los 3 datos relevantes para el usuario. aunque se imprime el cuadro de ciudades, el cual no toque
-    std::cout << "\nUsted esta en: " << nodos[salida].nombre << "\n";
-    std::cout << "Quiere viajar a: " << nodos[destino].nombre << "\n";
-    std::cout << "Distancia a recorrer: " << distancia << " km\n";
-      std::cout << "\n";
-}*/
 // aporte de kevin:modifique la funcion de salida para que sea mas grafico y el dijkstra pueda apreciearse 
 void preguntarRuta(const std::vector<Nodo>& nodos) {
     int salida, destino;
